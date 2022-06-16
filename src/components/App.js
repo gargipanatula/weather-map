@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import './App.css';
 import DatePicker from "./DatePicker";
 import CityList from "./CityList";
-import DataProcessor from "../calculations/DataProcessor";
 import Map from "./Map";
 
 // An overarching component that supports the app
@@ -11,19 +10,21 @@ class App extends Component {
     super();
     this.state = {
       date: new Date(), // date that the user has selected
-      weatherInfo: [[]]
+      weatherInfo: [[]] // holds [lat, long, cityName, forecastDesc, loTemp, hiTemp] for inputted cities
     };
   }
 
+  // passed down to DatePicker to update the date we display the forecast for
   update_date = (date_) => {
     this.setState({
       date: date_
     });
   }
 
+  // passed down to CityList to update the weather info we need to display
   update_weather_info = (info_) => {
     this.setState({
-      weatherInfo: info_
+        weatherInfo: info_
     });
   }
 
@@ -38,9 +39,11 @@ class App extends Component {
               date={this.state.date}
           />
           <Map
-              data={this.state.weatherInfo}
+
+              weatherInfo={this.state.weatherInfo}
           />
         </div>
+
     )
   };
 }

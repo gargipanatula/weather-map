@@ -36,3 +36,27 @@
     transform: rotate(360deg);
   }
 }
+
+#map {
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  width: 800px;
+}
+
+/* Sets size of map, which has class name "leaflet-container" */
+.leaflet-container {
+  width: 800px;
+  height: 600px;
+}
+
+.selection {
+  align-content: center;
+  padding: 40px;
+}
+
+h1 {
+  text-align: center;
+}
+

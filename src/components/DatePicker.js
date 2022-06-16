@@ -4,17 +4,17 @@ import 'react-calendar/dist/Calendar.css';
 
 // A calendar where users can select a date
 class DatePicker extends Component {
-    constructor() {
-        super();
-    }
-
+    // updates date when a user clicks a date
     handleChange = (date) => {
+        // find the difference between the selected date and the current date
         let now = new Date();
         let milliDiff = date - now;
         let daysDiff = Math.ceil(milliDiff / (1000 * 3600 * 24));
         if (daysDiff > 7) {
+            // if difference is too high, we cannot display a forecast for it
             alert("please choose a date that is at most a week from today");
         } else {
+            // pass up the date to App
             this.props.handleDateChange(date);
         }
     }

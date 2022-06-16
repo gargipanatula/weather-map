@@ -70,7 +70,7 @@ export class DataProcessor {
 
                 // add that info to an array with our existing info
                 promise.then(value => {
-                    let name = [temp[i].getX(), temp[i].getY(), temp[i].getName()];
+                    let name = [temp[i].getY(), temp[i].getX(), temp[i].getName()];
                     let comb = name.concat(value);
                     data.push(comb);
                 });

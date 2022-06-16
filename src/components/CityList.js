@@ -17,21 +17,22 @@ class CityList extends Component {
     }
 
     // draw
-    onDrawClick = () => {
-        // when we draw click, pass up coordinates to app
-        let dp = new DataProcessor(this.state.display.split('\n'), this.props.date);
+    onDrawClick = async () => {
+        let dp = await new DataProcessor(this.state.display.split('\n'), this.props.date);
+        let value = await dp.getCoords();
+        this.props.setWeatherInfo(value);
 
-        let promise = new Promise(resolve => {
-            resolve(dp.getCoords());
-        });
-
-        promise.then(value => {
-            this.props.setWeatherInfo(value);
-        })
+        // let promise = new Promise(resolve => {
+        //     resolve(dp.getCoords());
+        // });
+        //
+        // promise.then(value => {
+        //     this.props.setWeatherInfo(value);
+        // })
 
     }
 
-    onClearClick = () => {
+    onClearClick () {
         this.setState({
             display: ""
         })
