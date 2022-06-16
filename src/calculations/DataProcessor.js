@@ -31,14 +31,18 @@ export class DataProcessor {
                 // https://developers.arcgis.com/rest/geocode/api-reference/geocoding-find-address-candidates.htm#ESRI_SECTION1_DC481411A8494D809D3501B79059DBA6
                 // get location data
                 let url = "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?address=" + cityState[0] + "&region=" + cityState[1] + "&f=pjson";
-                let response = await fetch(url);
+                let responsePromise = fetch(url);
+                let response = await responsePromise;
+
                 if (!response.ok) {
                     alert("error code on DataProcessor.41");
                     return;
                 }
 
                 // parse the response
-                let text = await response.text();
+                let textPromise = response.text();
+                let text = await textPromise;
+
                 const obj = JSON.parse(text);
                 if (obj.candidates.length === 0) {
                     // error case for invalid city
@@ -64,16 +68,29 @@ export class DataProcessor {
         for (let i = 0; i < temp.length; i++) {
             try {
                 // get the weather info for the ith coordinates
-                let promise = new Promise(resolve => {
-                    resolve(this.getForecast(temp[i].getX(), temp[i].getY()));
-                });
+                // let promise = new Promise(resolve => {
+                //     resolve(this.getForecast(temp[i].getX(), temp[i].getY()));
+                // });
+
+                let forecastPromise = this.getForecast(temp[i].getX(), temp[i].getY());
+                let forecast = await forecastPromise;
+
+                let valuePromise = forecast.json();
+                let valueJson = await valuePromise;
+
+                let valueArr = JSON.parse(valueJson);
+                let value = await valueArr;
+
+                let name = [temp[i].getY(), temp[i].getX(), temp[i].getName()];
+                let comb = name.concat(value);
+                data.push(comb);
 
                 // add that info to an array with our existing info
-                promise.then(value => {
-                    let name = [temp[i].getY(), temp[i].getX(), temp[i].getName()];
-                    let comb = name.concat(value);
-                    data.push(comb);
-                });
+                // promise.then(value => {
+                //     let name = [temp[i].getY(), temp[i].getX(), temp[i].getName()];
+                //     let comb = name.concat(value);
+                //     data.push(comb);
+                // });
 
             } catch (e) {
                 alert("error with getting forecast");
@@ -103,30 +120,36 @@ export class DataProcessor {
             let long = Math.round((x + Number.EPSILON) * 10000) / 10000;
             // make call to get forecast
             let url = "https://api.weather.gov/points/" + lat + "," + long;
-            let response = await fetch(url, {
+            let responsePromise = await fetch(url, {
                 method: 'GET',
                 headers: h,
                 mode: 'cors'
             });
+            let response = await responsePromise;
+
             if (!response.ok) {
                 alert("error code on DataProcessor.110");
                 return;
             }
 
-            let text = await response.text();
+            let textPromise = response.text();
+            let text = await textPromise;
             const obj = JSON.parse(text);
 
             let forecastUrl = obj.properties.forecast;
 
             // make call to get forecast for the given day
-            let fResponse = await fetch(forecastUrl);
-            if (!response.ok) {
+            let fResponsePromise = fetch(forecastUrl);
+            let fResponse = await fResponsePromise;
+            if (!fResponse.ok) {
                 alert("error code on DataProcessor.122");
                 return;
             }
 
-            let ftext = await fResponse.text();
-            const fobj = JSON.parse(ftext);
+            let ftextPromise = fResponse.text();
+            let fText = await ftextPromise;
+
+            const fobj = JSON.parse(fText);
             let periods = fobj.properties.periods;
 
 

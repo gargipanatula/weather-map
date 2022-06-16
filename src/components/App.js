@@ -23,6 +23,7 @@ class App extends Component {
 
   // passed down to CityList to update the weather info we need to display
   update_weather_info = (info_) => {
+      console.log(this.state.weatherInfo);
     this.setState({
         weatherInfo: info_
     });
@@ -39,7 +40,6 @@ class App extends Component {
               date={this.state.date}
           />
           <Map
-
               weatherInfo={this.state.weatherInfo}
           />
         </div>

@@ -28,8 +28,6 @@ class Map extends Component {
 
     updatePoints() {
         let tempMaps = [[]];
-        const arrCopy = this.props.weatherInfo;
-        console.log(this.props.weatherInfo.length);
         for (let i = 1; i < this.props.weatherInfo.length; i++) {
             // let map = [];
             // let arr = this.props.weatherInfo[i];
@@ -91,12 +89,20 @@ class Map extends Component {
     render() {
         return (
             <div id="map">
+
                 <MapContainer center={[51.505, -0.09]} zoom={2} scrollWheelZoom={false}>
                     <TileLayer
                         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     />
+
                 </MapContainer>
+                {/*<>*/}
+                {/*    {this.props.weatherInfo.map(({lat, long, city, forecast, lo, hi}) => (*/}
+                {/*        <p key={city.toString()}>hello {city}.</p>*/}
+
+                {/*    ))}*/}
+                {/*</>*/}
             </div>
 
         );
