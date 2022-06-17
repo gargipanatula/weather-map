@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
+import './App.css';
 
 // A calendar where users can select a date
 class DatePicker extends Component {
@@ -22,7 +23,7 @@ class DatePicker extends Component {
     render() {
         return(
             <>
-                <h1>Display forecast for:</h1>
+                <h2>Display forecast for:</h2>
                 <Calendar onChange={this.handleChange}/>
             </>
         )

@@ -3,6 +3,7 @@ import './App.css';
 import DatePicker from "./DatePicker";
 import CityList from "./CityList";
 import Map from "./Map";
+import TempPicker from "./TempPicker";
 
 // An overarching component that supports the app
 class App extends Component {
@@ -10,7 +11,8 @@ class App extends Component {
     super();
     this.state = {
       date: new Date(), // date that the user has selected
-      weatherInfo: [[]] // holds [lat, long, cityName, forecastDesc, loTemp, hiTemp] for inputted cities
+      weatherInfo: [[]], // holds [lat, long, cityName, forecastDesc, loTemp, hiTemp] for inputted cities
+      temp: NaN
     };
   }
 
@@ -28,6 +30,12 @@ class App extends Component {
     });
   }
 
+  update_temp = (temp_) => {
+      this.setState({
+          temp: temp_
+      })
+  }
+
   render() {
     return (
         <div className="App">
@@ -37,9 +45,14 @@ class App extends Component {
           <CityList
               setWeatherInfo={this.update_weather_info}
               date={this.state.date}
+              setTemp={this.update_temp}
+          />
+          <TempPicker
+              setTemp={this.update_temp}
           />
           <Map
               weatherInfo={this.state.weatherInfo}
+              temp={this.state.temp}
           />
         </div>
 

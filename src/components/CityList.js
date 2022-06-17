@@ -6,7 +6,7 @@ class CityList extends Component {
     constructor() {
         super();
         this.state = {
-            display: "Seattle WA\n"
+            display: "Seattle, WA\n"
         };
     }
 
@@ -25,15 +25,6 @@ class CityList extends Component {
         let value = await valuePromise;
 
         this.props.setWeatherInfo(value);
-
-        // let promise = new Promise(resolve => {
-        //     resolve(dp.getCoords());
-        // });
-        //
-        // promise.then(value => {
-        //     this.props.setWeatherInfo(value);
-        // })
-
     }
 
     onClearClick () {

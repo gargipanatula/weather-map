@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { WeatherData } from './WeatherData';
 
-// turns user given data into
+// turns user given data into forecasts
 export class DataProcessor {
     constructor(locations_, date) {
         this.locations = locations_
@@ -59,21 +59,28 @@ export class DataProcessor {
         // add data for each entry using the api
         for (let i = 0; i < entries.length; i++) {
             // make an array that splits the city and state
-            let cityState = entries[i].split(' ');
+            let cityState = entries[i].split(',');
 
             // error case for empty lines
             if (cityState[0] === '') {
                 continue;
             }
-            console.log(cityState);
-
             // object to hold retrieved data for this entry
             let wd = new WeatherData();
+
+            // turn the city name into one long string so the api can process it
+            let city = "";
+            for (let i = 0; i < cityState.length-1; i++) {
+                city += cityState[i].trim();
+            }
+
+            // the last element after splitting will be the state name
+            let state = cityState[cityState.length-1].trim();
 
             try {
                 // https://developers.arcgis.com/rest/geocode/api-reference/geocoding-find-address-candidates.htm#ESRI_SECTION1_DC481411A8494D809D3501B79059DBA6
                 // get location data
-                let url = "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?address=" + cityState[0] + "&region=" + cityState[1] + "&f=pjson";
+                let url = "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?address=" + city + "&region=" + state + "&f=pjson";
                 let responsePromise = fetch(url);
                 let response = await responsePromise;
 
@@ -109,6 +116,7 @@ export class DataProcessor {
         return temp;
     }
 
+
     // get forecast for a given set of coordinates
     // https://weather-gov.github.io/api/general-faqs
     getForecast = async (x, y) => {
@@ -137,7 +145,7 @@ export class DataProcessor {
             let response = await responsePromise;
 
             if (!response.ok) {
-                alert("error code on DataProcessor.110");
+                alert("could not find one or more cities");
                 return;
             }
 
@@ -148,12 +156,12 @@ export class DataProcessor {
 
             // get the url that we can call to make the actual forecast call
             let forecastUrl = obj.properties.forecast;
-            let fResponsePromise = fetch(forecastUrl);
+            let fResponsePromise = fetch(forecastUrl, {
+                method: 'GET',
+                headers: h,
+                mode: 'cors'
+            });
             let fResponse = await fResponsePromise;
-            if (!fResponse.ok) {
-                alert("error code on DataProcessor.122");
-                return;
-            }
 
             // parse the response
             let ftextPromise = fResponse.text();
@@ -184,7 +192,7 @@ export class DataProcessor {
             }
 
         } catch (e) {
-            alert("error contacting the server");
+            alert("incorrect formatting of cities. It should be city, state e.g. Seattle, WA");
             console.log(e)
         }
 

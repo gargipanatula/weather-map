@@ -1,3 +1,4 @@
+// An object that represents the forecast data for a city
 export class WeatherData {
     constructor() {
         this.x = 0;
