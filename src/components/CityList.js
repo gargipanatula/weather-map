@@ -18,8 +18,12 @@ class CityList extends Component {
 
     // draw
     onDrawClick = async () => {
-        let dp = await new DataProcessor(this.state.display.split('\n'), this.props.date);
-        let value = await dp.getCoords();
+        let dpPromise = new DataProcessor(this.state.display.split('\n'), this.props.date);
+        let dp = await dpPromise;
+        // get the coordinates in a promise
+        let valuePromise = dp.getWeatherData();
+        let value = await valuePromise;
+
         this.props.setWeatherInfo(value);
 
         // let promise = new Promise(resolve => {

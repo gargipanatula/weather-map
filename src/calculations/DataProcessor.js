@@ -8,21 +8,64 @@ export class DataProcessor {
         this.date = date
     }
 
-    // sets coordinates and names for each entry in the textbox
-    getCoords = async () => {
-        // store the passed in data
-        let entries = this.locations; // ["city state", "city1 state1"]
+    // sets weather data and coordinates for every entry in the textbox
+    getWeatherData = async () => {
+        // get coordinates and city name for passed in cities
+        let tempPromise = this.getCoords();
+        let temp = await tempPromise;
 
-        // instantiate empty WeatherData objects in a temp array
-        let temp = []
+        // make structure to hold weather data
+        let data = [];
+
+        // use those coordinates to get forecast data
+        for (let i = 0; i < temp.length; i++) {
+            try {
+                let forecastPromise = this.getForecast(temp[i].getX(), temp[i].getY());
+                let forecastData = await forecastPromise;
+
+                let locationData = [temp[i].getY(), temp[i].getX(), temp[i].getName()];
+                let comb = locationData.concat(forecastData);
+                data.push(comb);
+
+                // get the weather info for the ith coordinates
+                // let promise = new Promise(resolve => {
+                //     resolve(this.getForecast(temp[i].getX(), temp[i].getY()));
+                // });
+                //
+                // // add that info to an array with our existing info (coordinates and city name)
+                // promise.then(value => {
+                //     let name = [temp[i].getY(), temp[i].getX(), temp[i].getName()];
+                //     let comb = name.concat(value);
+                //     data.push(comb);
+                // });
+            } catch (e) {
+                alert("error with getting forecast");
+            }
+            console.log(JSON.stringify(data));
+        }
+
+        console.log(data.length);
+        console.log(data);
+
+        // return the complete set of data for the inputted cities (coordinates, city name, forecast, hi, lo)
+        return data;
+    }
+
+    // get coordinates for each city in the textbox
+    getCoords = async () => {
+        let entries = this.locations; // ["city state", "city1 state1"]
+        let temp = [];
 
         // add data for each entry using the api
         for (let i = 0; i < entries.length; i++) {
+            // make an array that splits the city and state
             let cityState = entries[i].split(' ');
+
             // error case for empty lines
             if (cityState[0] === '') {
                 continue;
             }
+            console.log(cityState);
 
             // object to hold retrieved data for this entry
             let wd = new WeatherData();
@@ -42,20 +85,20 @@ export class DataProcessor {
                 // parse the response
                 let textPromise = response.text();
                 let text = await textPromise;
-
                 const obj = JSON.parse(text);
+
+                // ensure city is valid
                 if (obj.candidates.length === 0) {
-                    // error case for invalid city
                     alert("invalid city " + entries[i]);
                     continue;
                 }
 
-                // set coordinates and name
+                // set coordinates and name for city based on retrieved data
                 wd.setX(obj.candidates[0].location.x);
                 wd.setY(obj.candidates[0].location.y);
                 wd.setName(obj.candidates[0].address.split(',')[0]);
 
-                // add to temp array
+                // add that data to temp array
                 temp[i] = wd;
             } catch (e) {
                 alert("error contacting the server");
@@ -63,41 +106,7 @@ export class DataProcessor {
             }
         }
 
-        let data = [[]];
-        // turn those coordinates into forecast data
-        for (let i = 0; i < temp.length; i++) {
-            try {
-                // get the weather info for the ith coordinates
-                // let promise = new Promise(resolve => {
-                //     resolve(this.getForecast(temp[i].getX(), temp[i].getY()));
-                // });
-
-                let forecastPromise = this.getForecast(temp[i].getX(), temp[i].getY());
-                let forecast = await forecastPromise;
-
-                let valuePromise = forecast.json();
-                let valueJson = await valuePromise;
-
-                let valueArr = JSON.parse(valueJson);
-                let value = await valueArr;
-
-                let name = [temp[i].getY(), temp[i].getX(), temp[i].getName()];
-                let comb = name.concat(value);
-                data.push(comb);
-
-                // add that info to an array with our existing info
-                // promise.then(value => {
-                //     let name = [temp[i].getY(), temp[i].getX(), temp[i].getName()];
-                //     let comb = name.concat(value);
-                //     data.push(comb);
-                // });
-
-            } catch (e) {
-                alert("error with getting forecast");
-            }
-        }
-
-        return data;
+        return temp;
     }
 
     // get forecast for a given set of coordinates
@@ -114,13 +123,13 @@ export class DataProcessor {
 
         try {
             // https://weather-gov.github.io/api/general-faqs
-            // get forecast data from the api
             // get coordinates (rounded to 4 decimal places for the api)
             let lat = Math.round((y + Number.EPSILON) * 10000) / 10000;
             let long = Math.round((x + Number.EPSILON) * 10000) / 10000;
-            // make call to get forecast
+
+            // make call to get info about this location
             let url = "https://api.weather.gov/points/" + lat + "," + long;
-            let responsePromise = await fetch(url, {
+            let responsePromise = fetch(url, {
                 method: 'GET',
                 headers: h,
                 mode: 'cors'
@@ -132,13 +141,13 @@ export class DataProcessor {
                 return;
             }
 
+            // get the text from the response
             let textPromise = response.text();
             let text = await textPromise;
             const obj = JSON.parse(text);
 
+            // get the url that we can call to make the actual forecast call
             let forecastUrl = obj.properties.forecast;
-
-            // make call to get forecast for the given day
             let fResponsePromise = fetch(forecastUrl);
             let fResponse = await fResponsePromise;
             if (!fResponse.ok) {
@@ -146,13 +155,13 @@ export class DataProcessor {
                 return;
             }
 
+            // parse the response
             let ftextPromise = fResponse.text();
             let fText = await ftextPromise;
 
+            // find the correct period of time to display the data on (ensure it matches chosen date)
             const fobj = JSON.parse(fText);
             let periods = fobj.properties.periods;
-
-
             for (let i = 0; i < periods.length; i++) {
                 // get the start time of this period
                 let period = periods[i];
