@@ -22,12 +22,14 @@ class Map extends Component {
 
     componentDidUpdate(prevProps, prevState, ss) {
         if (this.props.weatherInfo !== prevProps.weatherInfo) {
-            this.updatePoints();
+            this.setMarkers();
         }
     }
 
     updatePoints() {
         let tempMaps = [[]];
+        console.log("prop length:")
+        console.log(this.props.weatherInfo.length);
         for (let i = 1; i < this.props.weatherInfo.length; i++) {
             // let map = [];
             // let arr = this.props.weatherInfo[i];
@@ -54,49 +56,49 @@ class Map extends Component {
     }
 
 
-    // setMarkers() {
-    //     let pointList = [];
-    //     // convert each line to a Marker component
-    //     let info = this.props.weatherInfo;
-    //     for (let i = 1; i < info.length; i++) {
-    //         let arr = info[i];
-    //
-    //         let lat = arr[0];
-    //         let long = arr[1];
-    //         let cityName = arr[2];
-    //         let forecastDesc = arr[3];
-    //         let lo = arr[4];
-    //         let hi = arr[5];
-    //
-    //         pointList.push(
-    //             <Marker position={[lat, long]} icon={this.getIcon()}>
-    //                 <Popup>
-    //                     {cityName}: {hi}/{lo}
-    //                     {/*<h6>{cityName}</h6>*/}
-    //                     {/*<p>{hi}/{lo}</p>*/}
-    //                     {/*<br>{forecastDesc}</br>*/}
-    //                 </Popup>
-    //             </Marker>);
-    //     }
-    //
-    //     console.log("pointList: ");
-    //     console.log(pointList);
-    //     this.setState({
-    //         markers: pointList
-    //     })
-    // }
+    setMarkers() {
+        let pointList = [];
+        // convert each line to a Marker component
+        for (let i = 0; i < this.props.weatherInfo.length; i++) {
+            let arr = this.props.weatherInfo[i];
+
+            let lat = arr[0];
+            let long = arr[1];
+            let cityName = arr[2];
+            let forecastDesc = arr[3];
+            let lo = arr[4];
+            let hi = arr[5];
+
+            pointList.push(
+                <Marker position={[lat, long]} icon={this.getIcon()}>
+                    <Popup>
+                        {cityName}: {hi}/{lo}
+                        {/*<h6>{cityName}</h6>*/}
+                        {/*<p>{hi}/{lo}</p>*/}
+                        {/*<br>{forecastDesc}</br>*/}
+                    </Popup>
+                </Marker>);
+        }
+
+        console.log("pointList: ");
+        console.log(pointList);
+        this.setState({
+            markers: pointList
+        })
+    }
 
     render() {
         return (
             <div id="map">
 
-                <MapContainer center={[51.505, -0.09]} zoom={2} scrollWheelZoom={false}>
+                <MapContainer center={[47.7511, -120.7401]} zoom={7} scrollWheelZoom={false}>
                     <TileLayer
                         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     />
-
+                    {this.state.markers}
                 </MapContainer>
+
                 {/*<>*/}
                 {/*    {this.props.weatherInfo.map(({lat, long, city, forecast, lo, hi}) => (*/}
                 {/*        <p key={city.toString()}>hello {city}.</p>*/}
