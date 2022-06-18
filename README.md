@@ -11,7 +11,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 To interact with this project, you'll need to run the scripts below, but here is a peek at what you can
 expect:
 
-![plot](./Interface.png)
+![interface](Interface.PNG)
 
 
 ## Available Scripts
