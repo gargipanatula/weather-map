@@ -20,24 +20,18 @@ export class DataProcessor {
         // use those coordinates to get forecast data
         for (let i = 0; i < temp.length; i++) {
             try {
-                let forecastPromise = this.getForecast(temp[i].getX(), temp[i].getY());
+                let forecastPromise = this.getForecast(temp[i].getX(), temp[i].getY(), temp[i].getName());
                 let forecastData = await forecastPromise;
 
+
                 let locationData = [temp[i].getY(), temp[i].getX(), temp[i].getName()];
+
+                console.log("locationData");
+                console.log(locationData);
+                console.log("forecastData");
+                console.log(forecastData);
                 let comb = locationData.concat(forecastData);
                 data.push(comb);
-
-                // get the weather info for the ith coordinates
-                // let promise = new Promise(resolve => {
-                //     resolve(this.getForecast(temp[i].getX(), temp[i].getY()));
-                // });
-                //
-                // // add that info to an array with our existing info (coordinates and city name)
-                // promise.then(value => {
-                //     let name = [temp[i].getY(), temp[i].getX(), temp[i].getName()];
-                //     let comb = name.concat(value);
-                //     data.push(comb);
-                // });
             } catch (e) {
                 alert("error with getting forecast");
             }
@@ -75,7 +69,7 @@ export class DataProcessor {
             }
 
             // the last element after splitting will be the state name
-            let state = cityState[cityState.length-1].trim();
+            let state = cityState[cityState.length-1];
 
             try {
                 // https://developers.arcgis.com/rest/geocode/api-reference/geocoding-find-address-candidates.htm#ESRI_SECTION1_DC481411A8494D809D3501B79059DBA6
@@ -119,7 +113,7 @@ export class DataProcessor {
 
     // get forecast for a given set of coordinates
     // https://weather-gov.github.io/api/general-faqs
-    getForecast = async (x, y) => {
+    getForecast = async (x, y, name) => {
         let h = new Headers({
             "Accept"       : "application/json",
             "User-Agent"   : "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.5005.63 Safari/537.36"
@@ -145,7 +139,7 @@ export class DataProcessor {
             let response = await responsePromise;
 
             if (!response.ok) {
-                alert("could not find one or more cities");
+                alert("could not find forecast for " + name);
                 return;
             }
 
@@ -162,7 +156,9 @@ export class DataProcessor {
                 mode: 'cors'
             });
             let fResponse = await fResponsePromise;
-
+            if (!fResponse.ok) {
+                return;
+            }
             // parse the response
             let ftextPromise = fResponse.text();
             let fText = await ftextPromise;

@@ -23,7 +23,7 @@ class DatePicker extends Component {
     render() {
         return(
             <>
-                <h2>Display forecast for:</h2>
+                <h2>Select a date:</h2>
                 <Calendar onChange={this.handleChange}/>
             </>
         )

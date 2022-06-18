@@ -38,16 +38,15 @@ class CityList extends Component {
     render() {
         return(
             <>
-                <h1>Input cities here</h1>
-                <h3>Format: city state</h3>
+                <h2>Input cities:</h2>
                 <textarea
                     rows={5}
                     cols={30}
                     onChange={this.onInputChange}
                     value={this.state.display}
                 /> <br/>
-                <button onClick={this.onDrawClick}>Draw</button>
-                <button onClick={this.onClearClick}>Clear</button>
+                <button className='button' onClick={this.onDrawClick}>Draw</button>
+                <button className='button' onClick={this.onClearClick}>Clear</button>
             </>
         )
     }

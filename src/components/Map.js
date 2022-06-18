@@ -53,9 +53,6 @@ class Map extends Component {
             let lo = arr[4];
             let hi = arr[5];
 
-            if (isNaN(lat) || isNaN(long)) {
-
-            }
             try {
                 console.log("checking");
                 console.log(this.props.temp)
