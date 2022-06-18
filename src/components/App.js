@@ -6,6 +6,7 @@ import Map from "./Map";
 import TempPicker from "./TempPicker";
 import ContainerRow from "./ContainerRow"
 import ContainerColumn from "./ContainerColumn";
+import background from "../background.jpg"
 
 // An overarching component that supports the app
 class App extends Component {
@@ -40,7 +41,7 @@ class App extends Component {
 
   render() {
     return (
-        <div className="App">
+        <div className="App" style={{ backgroundImage: `url(${background})` }}>
             <h1>Welcome to Weather App!</h1>
             <p>Get a forecast for your favorite cities</p>
             {/*<ContainerRow*/}

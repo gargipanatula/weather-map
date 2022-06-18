@@ -26,11 +26,11 @@
   display:flex;
   flex-direction:column;
 
-  margin-left: 40px;
+  margin-left: 80px;
   margin-right: 20px;
   margin-top: 20px;
   margin-bottom: 20px;
-  width: 400px;
+  width: 350px;
 }
 
 .rowC {
@@ -63,5 +63,11 @@
 
 h1 {
   text-align: center;
+  margin-bottom: 5px;
+}
+
+p {
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
 
