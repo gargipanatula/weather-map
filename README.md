@@ -1,6 +1,18 @@
 # Weather Map
 
+A React App that allows users to see the forecast for a given day for any US city they input.
+These forecasts will be displayed on an interactive map. Cooler forecasts show up with a blue 
+marker and warmer ones show up in red.
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
+## Interface
+
+To interact with this project, you'll need to run the scripts below, but here is a peek at what you can
+expect:
+
+![plot](./Interface.png)
+
 
 ## Available Scripts
 
