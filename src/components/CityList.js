@@ -10,13 +10,14 @@ class CityList extends Component {
         };
     }
 
+    // Updates text box to reflect user input
     onInputChange = (event) => {
         this.setState({
-            display: event.target.value, // updates text box to reflect input
+            display: event.target.value,
         })
     }
 
-    // draw
+    // Sends up whatever the user inputted so it can be turned into markers
     onDrawClick = async () => {
         let dpPromise = new DataProcessor(this.state.display.split('\n'), this.props.date);
         let dp = await dpPromise;
@@ -27,12 +28,12 @@ class CityList extends Component {
         this.props.setWeatherInfo(value);
     }
 
+    // clears the display and sends up an empty list of cities so that no markers show
     onClearClick () {
         this.setState({
             display: ""
         })
         this.props.setWeatherInfo([[]]);
-        // when we clear click, pass up empty coordinates to map
     }
 
     render() {
@@ -52,4 +53,4 @@ class CityList extends Component {
     }
 }
 
-export default CityList; // Don’t forget to use export default!
+export default CityList;

@@ -14,18 +14,21 @@ class Map extends Component {
         }
     }
 
+    // initializes the map to have 0 markers when first loaded
     componentDidMount() {
         this.setState({
             markers: []
         })
     }
 
+    // updates the markers that the map displays when our list of cities update
     componentDidUpdate(prevProps, prevState, ss) {
         if (this.props.weatherInfo !== prevProps.weatherInfo) {
             this.setMarkers();
         }
     }
 
+    // returns an icon of a red map point
     getRedIcon() {
         return L.icon({
             iconUrl: require("../red-icon.png"),
@@ -33,6 +36,7 @@ class Map extends Component {
         })
     }
 
+    // returns an icon of a blue map point
     getBlueIcon() {
         return L.icon({
             iconUrl: require("../blue-icon.png"),
@@ -40,6 +44,7 @@ class Map extends Component {
         })
     }
 
+    // creates markers off of the given weather and city data
     setMarkers() {
         let pointList = [];
         // convert each line to a Marker component
@@ -54,8 +59,7 @@ class Map extends Component {
             let hi = arr[5];
 
             try {
-                console.log("checking");
-                console.log(this.props.temp)
+                // make the marker red if the temperature is above the props temp
                 if (!isNaN(this.props.temp) && hi >= this.props.temp) {
                     console.log("passed check")
                     pointList.push(
@@ -65,7 +69,7 @@ class Map extends Component {
                                 {forecastDesc}
                             </Popup>
                         </Marker>);
-                } else {
+                } else { // make the marker blue otherwise
                     pointList.push(
                         <Marker position={[lat, long]} icon={this.getBlueIcon()}>
                             <Popup>
@@ -101,6 +105,6 @@ class Map extends Component {
     }
 }
 
-export default Map; // Don’t forget to use export default!
+export default Map;
 
 

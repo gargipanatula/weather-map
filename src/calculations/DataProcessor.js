@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { WeatherData } from './WeatherData';
 
-// turns user given data into forecasts
+// turns user given cities and states into forecasts
 export class DataProcessor {
     constructor(locations_, date) {
         this.locations = locations_
@@ -79,7 +79,7 @@ export class DataProcessor {
                 let response = await responsePromise;
 
                 if (!response.ok) {
-                    alert("error code on DataProcessor.41");
+                    alert("error contacting server, cannot find coordinates for one or more cities");
                     return;
                 }
 

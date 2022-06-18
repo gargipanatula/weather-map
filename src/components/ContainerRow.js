@@ -3,6 +3,7 @@ import Map  from './Map';
 import React, { Component } from "react";
 import './App.css';
 
+// contains a column of two components (map and text entry box) and then a map to the right of that column
 class ContainerRow extends Component {
     render(){
         return (

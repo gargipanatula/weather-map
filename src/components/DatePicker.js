@@ -11,8 +11,8 @@ class DatePicker extends Component {
         let now = new Date();
         let milliDiff = date - now;
         let daysDiff = Math.ceil(milliDiff / (1000 * 3600 * 24));
-        if (daysDiff > 7) {
-            // if difference is too high, we cannot display a forecast for it
+        if (daysDiff > 7 || daysDiff < 0) {
+            // if difference is too high or in the past, we cannot display a forecast for it
             alert("please choose a date that is at most a week from today");
         } else {
             // pass up the date to App
@@ -30,4 +30,4 @@ class DatePicker extends Component {
     }
 }
 
-export default DatePicker; // Don’t forget to use export default!
+export default DatePicker;

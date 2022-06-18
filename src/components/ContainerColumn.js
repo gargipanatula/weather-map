@@ -3,6 +3,7 @@ import CityList  from './CityList';
 import React, { Component } from "react";
 import './App.css';
 
+// contains a calendar and text entry box stacked on top of one another
 class ContainerColumn extends Component {
     render(){
         return (
