@@ -4,6 +4,9 @@ A React App that allows users to see the forecast for a given day for any US cit
 These forecasts will be displayed on an interactive map. Cooler forecasts show up with a blue 
 marker and warmer ones show up in red.
 
+This app uses the weather.gov API, and these calls are unreliable for certain cities. If you
+do not see data for a certain city, wait a minute before trying again.
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Interface
@@ -14,13 +17,15 @@ expect:
 ![interface](Interface.PNG)
 
 
-## Available Scripts
+## How To Run This App
 
 In the project directory, you can run:
 
 ### `npm start`
 
-Runs the app in the development mode.\
+Clone the project and open it in your preferred IDE. Then, run npm start (you will need to download Node.js if you haven't already).
+
+This runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
 The page will reload when you make changes.\
@@ -35,7 +40,3 @@ The build is minified and the filenames include the hashes.\
 Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
